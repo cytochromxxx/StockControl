@@ -5,7 +5,12 @@ export interface CategoryDef {
   id: string;
   key: string;
   label: string;
-  defaultThreshold: number; // Added default threshold for categories
+  defaultThreshold: number; 
+}
+
+export interface User {
+  name: string;
+  initials: string;
 }
 
 export interface HistoryEntry {
@@ -21,7 +26,7 @@ export interface Kit {
   name: string;
   category: Category;
   description: string;
-  linkedProducts: string; // New field for linked products
+  linkedProducts: string; 
   startVolume: number;
   currentVolume: number;
   criticalThreshold: number;

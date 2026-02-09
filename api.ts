@@ -1,22 +1,28 @@
 
-import { Kit, CategoryDef, HistoryEntry } from './types';
+import { Kit, CategoryDef, HistoryEntry, User } from './types';
 
-// Kategorie-Definitionen
+// Kategorie-Definitionen - Suffix "-Serien" entfernt
 let categories: CategoryDef[] = [
-  { id: 'k', key: 'K', label: 'K-Serien', defaultThreshold: 2000 },
-  { id: 'q', key: 'Q', label: 'Q-Serien', defaultThreshold: 2000 },
-  { id: 's', key: 'S', label: 'S-Serien', defaultThreshold: 1000 },
-  { id: 'si', key: 'Si', label: 'Si-Serien', defaultThreshold: 1000 },
+  { id: 'k', key: 'K', label: 'K', defaultThreshold: 2000 },
+  { id: 'q', key: 'Q', label: 'Q', defaultThreshold: 2000 },
+  { id: 's', key: 'S', label: 'S', defaultThreshold: 1000 },
+  { id: 'si', key: 'Si', label: 'Si', defaultThreshold: 1000 },
   { id: 'enzyme', key: 'Enzyme', label: 'Enzyme/Taq', defaultThreshold: 1000 },
   { id: 'bacteria', key: 'Bacteria', label: 'Bakterien', defaultThreshold: 1000 }
 ];
 
-const gid = () => 'h_' + Math.random().toString(36).substr(2, 9);
+// Laborteam User Management
+export const labUsers: User[] = [
+  { name: 'Flo', initials: 'FH' },
+  { name: 'Nico', initials: 'NR' },
+  { name: 'Steffi', initials: 'SM' },
+  { name: 'Harold', initials: 'HMa' },
+  { name: 'Christian', initials: 'CTh' },
+  { name: 'Agnesa', initials: 'AC' },
+  { name: 'Camila', initials: 'CMz' }
+];
 
-// Hilfsfunktion zum Parsen der Werte (entfernt " µl" und wandelt in Zahl um)
-const parseVal = (val: string): number => {
-  return parseFloat(val.replace(/[^\d.-]/g, ''));
-};
+const gid = () => 'h_' + Math.random().toString(36).substr(2, 9);
 
 let kits: Kit[] = [
   // --- K-SERIEN ---
@@ -70,7 +76,7 @@ let kits: Kit[] = [
   },
   {
     id: "K13", name: "K13", category: "K", linkedProducts: "8er Streifen Sigma", description: "Oligo",
-    startVolume: 2975, currentVolume: 1025, criticalThreshold: 1000,
+    startVolume: 2975, currentVolume: 950, criticalThreshold: 1000,
     history: [
       { id: gid(), date: "27.01.2026", amount: -325, person: "SM", comment: "Entnahme" },
       { id: gid(), date: "07.01.2026", amount: -425, person: "HMa", comment: "Entnahme" },
@@ -343,6 +349,44 @@ export const kitApi = {
 
     const entry: HistoryEntry = { ...payload, id: gid(), amount };
     kits[idx] = { ...kits[idx], currentVolume: kits[idx].currentVolume + amount, history: [entry, ...kits[idx].history] };
+    return kits[idx];
+  },
+
+  async removeHistoryEntry(kitId: string, entryId: string): Promise<Kit> {
+    await sleep(300);
+    const idx = kits.findIndex(k => k.id === kitId);
+    if (idx === -1) throw new Error("Kit nicht gefunden");
+    const entryIdx = kits[idx].history.findIndex(e => e.id === entryId);
+    if (entryIdx === -1) throw new Error("Eintrag nicht gefunden");
+    
+    const entry = kits[idx].history[entryIdx];
+    // Reverse the volume effect
+    const newVolume = kits[idx].currentVolume - entry.amount;
+    
+    const newHistory = [...kits[idx].history];
+    newHistory.splice(entryIdx, 1);
+    
+    kits[idx] = { ...kits[idx], currentVolume: newVolume, history: newHistory };
+    return kits[idx];
+  },
+
+  async updateHistoryEntry(kitId: string, entryId: string, newAmount: number): Promise<Kit> {
+    await sleep(300);
+    const idx = kits.findIndex(k => k.id === kitId);
+    if (idx === -1) throw new Error("Kit nicht gefunden");
+    const entryIdx = kits[idx].history.findIndex(e => e.id === entryId);
+    if (entryIdx === -1) throw new Error("Eintrag nicht gefunden");
+    
+    const entry = kits[idx].history[entryIdx];
+    const diff = newAmount - entry.amount;
+    const newVolume = kits[idx].currentVolume + diff;
+    
+    if (newVolume < 0) throw new Error("Unzureichendes Restvolumen für diese Korrektur");
+    
+    const newHistory = [...kits[idx].history];
+    newHistory[entryIdx] = { ...entry, amount: newAmount };
+    
+    kits[idx] = { ...kits[idx], currentVolume: newVolume, history: newHistory };
     return kits[idx];
   }
 };
