@@ -1,0 +1,5 @@
+{
+  "name": "Oligo/Kit Inventory Manager",
+  "description": "A high-performance, in-memory inventory management system for laboratory kits and oligos with real-time stock tracking and visual analytics.",
+  "requestFramePermissions": []
+}

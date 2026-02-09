@@ -1,11 +1,27 @@
-<div align="center">
 
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+# BioStock Pro | Laboratory Inventory Management
 
-  <h1>Built with AI Studio</h2>
+A specialized, high-performance SPA for tracking oligos, kits, and polymerases in a bio-laboratory setting.
 
-  <p>The fastest path from prompt to production with Gemini.</p>
+## Key Features
+- **Visual Analytics**: Real-time progress bars with dynamic color grading (>70% Green, 30-70% Yellow, <30% Critical Red).
+- **Intelligent Alerts**: Critical items exhibit a pulsing glow and a shake animation to prompt restocking.
+- **In-Memory API**: Fully simulated RESTful lifecycle with state persistence within the current session.
+- **Glassmorphism UI**: optimized for dark lab environments with high contrast and focus-friendly aesthetics.
 
-  <a href="https://aistudio.google.com/apps">Start building</a>
+## Quick Start
+1. Ensure all files are in the same root directory.
+2. Serve locally:
+   ```bash
+   python -m http.server 8000
+   ```
+3. Open `http://localhost:8000` in any modern browser.
 
-</div>
+## Tech Stack
+- **React 19**: Component architecture.
+- **Tailwind CSS**: Utility-first styling with custom glass filters.
+- **Recharts**: Data visualization for consumption history.
+- **TypeScript**: Type safety for complex lab data models.
+
+## Persistence Note
+**Crucial**: This application is a pure front-end simulation. Data changes are stored in system RAM. **Reloading the page will reset the inventory** to the default values defined in `api.ts`.

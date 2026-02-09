@@ -1,0 +1,80 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BioStock Pro | Lab Inventory</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    
+    :root {
+      --accent: #2ecc71;
+      --bg: #1c1c1e;
+      --panel: rgba(40, 40, 43, 0.7);
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg);
+      color: #e6eef3;
+      margin: 0;
+      background-image: radial-gradient(circle at 50% -20%, #2c2c2e 0%, #1c1c1e 80%);
+      min-height: 100vh;
+    }
+
+    .glass {
+      background: var(--panel);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .critical-shake {
+      animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both infinite;
+      transform: translate3d(0, 0, 0);
+      backface-visibility: hidden;
+      perspective: 1000px;
+    }
+
+    @keyframes shake {
+      10%, 90% { transform: translate3d(-1px, 0, 0); }
+      20%, 80% { transform: translate3d(2px, 0, 0); }
+      30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+      40%, 60% { transform: translate3d(4px, 0, 0); }
+    }
+
+    @keyframes success-flash {
+      0% { background-color: rgba(46, 204, 113, 0.2); }
+      100% { background-color: transparent; }
+    }
+
+    .animate-success-flash {
+      animation: success-flash 1s ease-out forwards;
+    }
+
+    .glow-green { box-shadow: 0 0 15px rgba(46, 204, 113, 0.3); }
+    .glow-red { box-shadow: 0 0 20px rgba(239, 68, 68, 0.4); }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(46, 204, 113, 0.3); }
+  </style>
+  <script type="importmap">
+  {
+    "imports": {
+      "recharts": "https://esm.sh/recharts@^3.7.0",
+      "react": "https://esm.sh/react@^19.2.4",
+      "react/": "https://esm.sh/react@^19.2.4/",
+      "react-dom/": "https://esm.sh/react-dom@^19.2.4/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
